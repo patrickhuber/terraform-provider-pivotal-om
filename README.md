@@ -17,9 +17,9 @@ variable "pivotal_om_password" { type = "string" }
 variable "pivotal_om_decryption_passphrase" { type = "string" }
 
 provider "pivotal_om" {
-    target =  "${var.target}"
-    username =  "${var.username}"
-    password =  "${var.password}"
+    target =  "${var.pivotal_om_target}"
+    username =  "${var.pivotal_om_username}"
+    password =  "${var.pivotal_om_password}"
 }
 ```
 
@@ -27,7 +27,7 @@ provider "pivotal_om" {
 
 ```HCL
 resource "pivotal_om_internal_user_store" "user_store" {
-    decryption_passphrase =  "${var.decryption_passphrase}"    
+    decryption_passphrase =  "${var.pivotal_om_decryption_passphrase}"    
 }
 ```
 
