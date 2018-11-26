@@ -56,17 +56,20 @@ resource "pivotal_om_aws_iaas_configuration" "iaas_configuration" {
 
 resource "pivotal_om_aws_availability_zone" "az1"{
     name = "us-east-1a"
-    zone = "us-east-1a"
+    zone = "us-east-1a"    
+    iaas_configuration_id = "${pivotal_om_aws_iaas_configuration.iaas_configuration}"
 }
 
 resource "pivotal_om_aws_availability_zone" "az2"{
     name = "us-east-1b"
     zone = "us-east-1b"
+    iaas_configuration_id = "${pivotal_om_aws_iaas_configuration.iaas_configuration}"
 }
 
 resource "pivotal_om_aws_availability_zone" "az3"{
     name = "us-east-1c"
     zone = "us-east-1c"
+    iaas_configuration_id = "${pivotal_om_aws_iaas_configuration.iaas_configuration}"
 }
 ```
 
@@ -83,19 +86,22 @@ resource "pivotal_om_gcp_iaas_configuration" "iaas_configuration"{
 
 resource "pivotal_om_gcp_az" "az1" {
     name = "us-central1-a"
-    zone = "us-central1-a"
+    zone = "us-central1-a"    
+    iaas_configuration_id = "${pivotal_om_gcp_iaas_configuration.iaas_configuration}"
 }
 
 
 resource "pivotal_om_gcp_az" "az2" {
     name = "us-central1-b"
     zone = "us-central1-b"
+    iaas_configuration_id = "${pivotal_om_gcp_iaas_configuration.iaas_configuration}"
 }
 
 
 resource "pivotal_om_gcp_az" "az3" {
     name = "us-central1-c"
     zone = "us-central1-c"
+    iaas_configuration_id = "${pivotal_om_gcp_iaas_configuration.iaas_configuration}"
 }
 ```
 
@@ -143,18 +149,21 @@ resource "pivotal_om_vsphere_az" "az1" {
     name = "az1"
     cluster = ""
     resource_pool = "" # optional
+    iaas_configuration_id = "${pivotal_om_vsphere_iaas_configuration.iaas_configuration}"
 }
 
 resource "pivotal_om_vsphere_az" "az2" {    
     name = "az2"
     cluster = ""
     resource_pool = "" # optional
+    iaas_configuration_id = "${pivotal_om_vsphere_iaas_configuration.iaas_configuration}"
 }
 
 resource "pivotal_om_vsphere_az" "az3" {    
     name = "az3"
     cluster = ""
     resource_pool = "" # optional
+    iaas_configuration_id = "${pivotal_om_vsphere_iaas_configuration.iaas_configuration}"
 }
 ```
 
@@ -177,6 +186,24 @@ resource "pivotal_om_openstack_iaas_configuration" "iaas_configuration"{
     ignore_server_availability_zone = true
     dhcp_enabled = false
     api_ssl_cert = ""
+}
+
+resource "pivotal_om_openstack_az" "az1" {
+    name = "az1"
+    zone = "nova"
+    iaas_configuration_id = "${pivotal_om_openstack_iaas_configuration.iaas_configuration}"
+}
+
+resource "pivotal_om_openstack_az" "az2" {
+    name = "az2"
+    zone = ""
+    iaas_configuration_id = "${pivotal_om_openstack_iaas_configuration.iaas_configuration}"
+}
+
+resource "pivotal_om_openstack_az" "az3" {
+    name = "az3"
+    zone = ""
+    iaas_configuration_id = "${pivotal_om_openstack_iaas_configuration.iaas_configuration}"
 }
 ```
 
