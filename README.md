@@ -228,7 +228,7 @@ resource "pivotal_om_director" "director_configuration"{
         database = "{var.external_database_name}"
     }
 
-    # ("s3" | "internal")
+    # ("s3" | "internal" | "gcs")
     blobstore_type = "s3"
 
     s3_blobstore_location{
