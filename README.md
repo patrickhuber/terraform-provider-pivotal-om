@@ -277,7 +277,7 @@ resource "pivotal_om_network" "deployment_network"{
         gateway = ""
     }
     # empty or optional for azure
-    availability_zones = []
+    availability_zones = ["az1", "az2", "az3"]
 }
 
 resource "pivotal_om_network" "infrastructure_network"{
@@ -291,7 +291,7 @@ resource "pivotal_om_network" "infrastructure_network"{
         gateway = ""
     }
     # empty or optional for azure
-    availability_zones = []
+    availability_zones = ["az1", "az2", "az3"]
 }
 
 resource "pivotal_om_network" "services_network"{
@@ -305,6 +305,6 @@ resource "pivotal_om_network" "services_network"{
         gateway = ""
     }
     # empty or optional for azure
-    availability_zones = []
+    availability_zones = ["az1", "az2", "az3"]
 }
 ```
