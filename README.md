@@ -10,24 +10,96 @@ Provides a terraform provider for pivotal ops manager
 
 ### Create the provider
 
+#### variables
+
 ```HCL
 variable "pivotal_om_target" { type = "string" }
 variable "pivotal_om_username" { type = "string" }
 variable "pivotal_om_password" { type = "string" }
 variable "pivotal_om_decryption_passphrase" { type = "string" }
+```
 
+#### internal authentication
+
+```HCL
 provider "pivotal_om" {
     target =  "${var.pivotal_om_target}"
     username =  "${var.pivotal_om_username}"
     password =  "${var.pivotal_om_password}"
+    decryption_passphrase = "$var.pivotal_om_decryption_passphrase}"    
+
+    authentication_type = "internal" # internal | ldap | saml
+    internal_authentication_options = {
+        username = "${var.pivotal_om_username}"
+        password = "${var.pivotal_om_password}"
+    }
 }
 ```
 
-### Create the user store resource
+#### ldap authentication
 
 ```HCL
-resource "pivotal_om_internal_user_store" "user_store" {
-    decryption_passphrase =  "${var.pivotal_om_decryption_passphrase}"    
+provider "pivotal_om" {
+    target =  "${var.pivotal_om_target}"
+    username =  "${var.pivotal_om_username}"
+    password =  "${var.pivotal_om_password}"
+    decryption_passphrase = "$var.pivotal_om_decryption_passphrase}"    
+
+    authentication_type = "ldap" # internal | ldap | saml
+    ldap_authentication_options = {
+        server_url = ""
+        server_ssl_cert = ""
+        username = ""
+        password = ""
+        email_attribute = ""
+        group_search_base = ""
+        group_search_filter = ""        
+        user_search_base = ""
+        user_search_filter = ""
+        referrals = "follow" # follow | ignore | throw
+    }
+}
+```
+
+#### saml authentication
+
+```HCL
+provider "pivotal_om" {
+    target =  "${var.pivotal_om_target}"
+    username =  "${var.pivotal_om_username}"
+    password =  "${var.pivotal_om_password}"
+    decryption_passphrase = "$var.pivotal_om_decryption_passphrase}"    
+
+    authentication_type = "saml" # internal | ldap | saml
+    saml_authentication_options = {
+        bosh_idp_metadata = ""
+        idp_metadata = ""
+        rbac_admin_group = ""
+        rbac_groups_attribute = ""
+    }
+}
+```
+
+#### proxy settings (with internal authentication)
+
+proxy settings can be added to any of the above configurations
+
+```HCL
+provider "pivotal_om" {
+    target =  "${var.pivotal_om_target}"
+    username =  "${var.pivotal_om_username}"
+    password =  "${var.pivotal_om_password}"
+    decryption_passphrase = "$var.pivotal_om_decryption_passphrase}"    
+
+    authentication_type = "internal" # internal | ldap | saml
+    internal_authentication_options = {
+        username = "${var.pivotal_om_username}"
+        password = "${var.pivotal_om_password}"
+    }
+    
+    http_proxy = "https://proxy.my.domain.com"
+    https_proxy = "https://proxy.my.domain.com"
+    no_proxy = "127.0.0.1,localhost,my.domain.com"
 }
 ```
 
@@ -75,7 +147,7 @@ resource "pivotal_om_aws_availability_zone" "az3"{
 
 #### gcp
 
-```
+```HCL
 resource "pivotal_om_gcp_iaas_configuration" "iaas_configuration"{
     director_configuration_id = "${pivotal_om_director.director_configuration.id}"
     project_id = ""
@@ -90,13 +162,11 @@ resource "pivotal_om_gcp_az" "az1" {
     iaas_configuration_id = "${pivotal_om_gcp_iaas_configuration.iaas_configuration}"
 }
 
-
 resource "pivotal_om_gcp_az" "az2" {
     name = "us-central1-b"
     zone = "us-central1-b"
     iaas_configuration_id = "${pivotal_om_gcp_iaas_configuration.iaas_configuration}"
 }
-
 
 resource "pivotal_om_gcp_az" "az3" {
     name = "us-central1-c"
@@ -107,7 +177,7 @@ resource "pivotal_om_gcp_az" "az3" {
 
 #### azure
 
-```
+```HCL
 resource "pivotal_om_azure_iaas_configuration" "iaas_configuration" {
     director_configuration_id = "${pivotal_om_director.director_configuration.id}"
     subscription_id = ""
@@ -128,7 +198,7 @@ resource "pivotal_om_azure_iaas_configuration" "iaas_configuration" {
 
 #### vsphere
 
-```
+```HCL
 resource "pivotal_om_vsphere_iaas_configuration" "iaas_configuration"{    
     director_configuration_id = "${pivotal_om_director.director_configuration.id}"
     vcenter_host = ""
@@ -169,7 +239,7 @@ resource "pivotal_om_vsphere_az" "az3" {
 
 #### openstack
 
-```
+```HCL
 resource "pivotal_om_openstack_iaas_configuration" "iaas_configuration"{    
     director_configuration_id = "${pivotal_om_director.director_configuration.id}"
     identity_endpoint = ""
@@ -209,7 +279,7 @@ resource "pivotal_om_openstack_az" "az3" {
 
 #### director
 
-```
+```HCL
 resource "pivotal_om_director" "director_configuration"{
     ntp_servers  =  ["0.amazon.pool.ntp.org", "1.amazon.pool.ntp.org", "3.amazon.pool.ntp.org"]
     resurrector_enabled =  false
